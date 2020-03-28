@@ -1,6 +1,5 @@
 package tqs.air.quality.metrics.controller;
 
-import com.google.common.cache.CacheStats;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -24,7 +24,7 @@ public class BreezometerAPI {
         if (localDateTime == null) {
             response = currentPollutantRequest(latitude, longitude);
         } else {
-            response = pastPollutantRequest(latitude, longitude, localDateTime);
+            response = pastOrFuturePollutantRequest(latitude, longitude, localDateTime);
         }
 
         if (response.getStatusCodeValue() == 404) {
@@ -53,8 +53,8 @@ public class BreezometerAPI {
                 BreezometerResult.class);
     }
 
-    private ResponseEntity<BreezometerResult> pastPollutantRequest(double latitude, double longitude,
-                                                                   LocalDateTime localDateTime) {
+    private ResponseEntity<BreezometerResult> pastOrFuturePollutantRequest(double latitude, double longitude,
+                                                                           LocalDateTime localDateTime) {
         RestTemplate restTemplate = new RestTemplate();
 
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
