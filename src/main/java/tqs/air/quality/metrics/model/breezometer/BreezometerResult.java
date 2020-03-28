@@ -22,12 +22,4 @@ public class BreezometerResult {
     public void setData(BreezometerData data) {
         this.data = data;
     }
-
-    @Override
-    public String toString() {
-        return "BreezometerResult{" +
-                "error='" + error + '\'' +
-                ", data=" + data +
-                '}';
-    }
 }

@@ -36,12 +36,4 @@ public class BreezometerData {
         this.pollutants = pollutants;
     }
 
-    @Override
-    public String toString() {
-        return "BreezometerData{" +
-                "dateTime=" + dateTime +
-                ", dateAvailable=" + dateAvailable +
-                ", pollutants=" + pollutants +
-                '}';
-    }
 }

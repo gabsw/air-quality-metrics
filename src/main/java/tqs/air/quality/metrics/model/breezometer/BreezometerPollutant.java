@@ -32,13 +32,4 @@ public class BreezometerPollutant {
     public void setConcentration(BreezometerConcentration concentration) {
         this.concentration = concentration;
     }
-
-    @Override
-    public String toString() {
-        return "BreezometerPollutant{" +
-                "initials='" + initials + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", concentration=" + concentration +
-                '}';
-    }
 }

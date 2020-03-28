@@ -19,12 +19,4 @@ public class BreezometerConcentration {
     public void setUnits(String units) {
         this.units = units;
     }
-
-    @Override
-    public String toString() {
-        return "BreezometerConcentration{" +
-                "value=" + value +
-                ", units='" + units + '\'' +
-                '}';
-    }
 }
