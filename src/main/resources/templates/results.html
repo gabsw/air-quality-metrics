@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Results</title>
+</head>
+<body>
+    <div class="container metrics_list">
+        <h2>Air Quality Metrics</h2>
+        <p>Latitude: <span th:text="${metrics.latitude}" /></p>
+        <p>Longitude: <span th:text="${metrics.longitude}" /></p>
+        <p>Date and Time: <span th:text="${metrics.dateTime}"/></p>
+        <br />
+        <table>
+            <tr>
+                <th>Initials</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Units</th>
+            </tr>
+            <th:block th:each="gas : ${metrics.gases}">
+                <tr>
+                    <td th:text="${gas.initials}" />
+                    <td th:text="${gas.name}" />
+                    <td th:text="${gas.amount}" />
+                    <td th:text="${gas.units}" />
+                </tr>
+            </th:block>
+        </table>
+    </div>
+
+    <p>Go back to <a href="/">home page</a></p>
+</body>
+</html>

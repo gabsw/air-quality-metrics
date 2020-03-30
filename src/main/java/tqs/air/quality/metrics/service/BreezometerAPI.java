@@ -13,19 +13,15 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class BreezometerAPI {
     private static final String API_KEY = "55d98126b0ed483da9ff706420b37411";
-    private static final String uri = "https://api.breezometer.com/air-quality/v2/current-conditions";
+    private static final String URI_PRESENT = "https://api.breezometer.com/air-quality/v2/current-conditions";
+    private static final String URI_PAST = "https://api.breezometer.com/air-quality/v2/historical/hourly";
+    private static final String URI_FUTURE = "https://api.breezometer.com/air-quality/v2/forecast/hourly";
     private static final String POLLUTANT_FEATURE = "pollutants_concentrations";
 
     public BreezometerResult getBreezometerResult(double latitude, double longitude, LocalDateTime localDateTime)
             throws Exception {
 
-        ResponseEntity<BreezometerResult> response;
-
-        if (localDateTime == null) {
-            response = currentPollutantRequest(latitude, longitude);
-        } else {
-            response = pastOrFuturePollutantRequest(latitude, longitude, localDateTime);
-        }
+        ResponseEntity<BreezometerResult> response = pollutantRequest(latitude, longitude, localDateTime);
 
         if (response.getStatusCodeValue() == 404) {
             throw new BreezometerResultNotFoundException("Breezometer result not found for: " +
@@ -36,38 +32,47 @@ public class BreezometerAPI {
             throw new Exception("Breezometer request not valid for: " +
                     "latitude=" + latitude + ", longitude=" + longitude);
         }
-
         return response.getBody();
     }
 
-    private ResponseEntity<BreezometerResult> currentPollutantRequest(double latitude, double longitude) {
+    private ResponseEntity<BreezometerResult> pollutantRequest(double latitude, double longitude,
+                                                                           LocalDateTime localDateTime) {
         RestTemplate restTemplate = new RestTemplate();
-
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(uri)
-                .queryParam("lat", latitude)
-                .queryParam("lon", longitude)
-                .queryParam("key", API_KEY)
-                .queryParam("features", POLLUTANT_FEATURE);
+        UriComponentsBuilder builder = buildUriForRequest(latitude, longitude, localDateTime);
 
         return restTemplate.getForEntity(builder.build().encode().toUri(),
                 BreezometerResult.class);
     }
 
-    private ResponseEntity<BreezometerResult> pastOrFuturePollutantRequest(double latitude, double longitude,
-                                                                           LocalDateTime localDateTime) {
-        RestTemplate restTemplate = new RestTemplate();
+    private UriComponentsBuilder buildUriForRequest(double latitude, double longitude,
+                                                    LocalDateTime localDateTime) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        String formattedLocalDateTime = localDateTime.format(formatter);
+        LocalDateTime currentTime = LocalDateTime.now();
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(uri)
-                .queryParam("lat", latitude)
-                .queryParam("lon", longitude)
-                .queryParam("key", API_KEY)
-                .queryParam("datetime", formattedLocalDateTime)
-                .queryParam("features", POLLUTANT_FEATURE);
-
-        return restTemplate.getForEntity(builder.build().encode().toUri(),
-                BreezometerResult.class);
+        if (localDateTime == null) {
+            return UriComponentsBuilder.fromHttpUrl(URI_PRESENT)
+                    .queryParam("lat", latitude)
+                    .queryParam("lon", longitude)
+                    .queryParam("key", API_KEY)
+                    .queryParam("features", POLLUTANT_FEATURE);
+        } else if (localDateTime.isBefore(currentTime)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+            String formattedLocalDateTime = localDateTime.format(formatter);
+            return UriComponentsBuilder.fromHttpUrl(URI_PAST)
+                    .queryParam("lat", latitude)
+                    .queryParam("lon", longitude)
+                    .queryParam("key", API_KEY)
+                    .queryParam("datetime", formattedLocalDateTime)
+                    .queryParam("features", POLLUTANT_FEATURE);
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+            String formattedLocalDateTime = localDateTime.format(formatter);
+            return UriComponentsBuilder.fromHttpUrl(URI_FUTURE)
+                    .queryParam("lat", latitude)
+                    .queryParam("lon", longitude)
+                    .queryParam("key", API_KEY)
+                    .queryParam("datetime", formattedLocalDateTime)
+                    .queryParam("features", POLLUTANT_FEATURE);
+        }
     }
 }

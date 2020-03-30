@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+</head>
+<body>
+    <h1>Air Quality Metrics</h1>
+
+    <form method="post" th:action="@{/air-quality}" th:object="${locationDateTime}">
+        <label for="lat">Latitude:</label>
+        <input type="text" id="lat" name="lat" placeholder="DD.dddddd" pattern="^(\+|-)?(?:90(?:(?:\.0{1,6})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,6})?))$" title="Number between +90 and -90, with 6 decimal cases at most" required autofocus th:field="*{latitude}"><br><br>
+        <label for="long">Longitude:</label>
+        <input type="text" id="long" name="long" placeholder="DDD.dddddd" pattern="^(\+|-)?(?:180(?:(?:\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,6})?))$" title="Number between +180 and -180, with 6 decimal cases at most" required th:field="*{longitude}"><br><br>
+        <label for="datetime">Date and Time:</label>
+        <input type="text" id="datetime" name="datetime" placeholder="YYYY-MM-DDThh:mm:ss" pattern="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}" title="YYYY-MM-DDThh:mm:ss" th:field="*{localDateTime}" ><br><br>
+        <input type="submit" value="Submit">
+        <input type="reset" value="Reset">
+    </form>
+
+</body>
+</html>

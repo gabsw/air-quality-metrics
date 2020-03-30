@@ -8,8 +8,8 @@ import tqs.air.quality.metrics.model.CacheStatsDTO;
 import tqs.air.quality.metrics.service.AirQualityMetricsService;
 
 @RestController
-@RequestMapping("cache-stats")
-public class CacheStatsController {
+@RequestMapping("api/cache-stats")
+public class RestCacheStatsController {
 
     @Autowired
     private AirQualityMetricsService service;

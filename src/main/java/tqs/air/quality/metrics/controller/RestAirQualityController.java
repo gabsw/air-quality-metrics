@@ -12,8 +12,8 @@ import tqs.air.quality.metrics.service.AirQualityMetricsService;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("air-quality-metrics")
-public class AirQualityMetricsController {
+@RequestMapping("api/air-quality-metrics")
+public class RestAirQualityController {
 
     @Autowired
     private AirQualityMetricsService service;
