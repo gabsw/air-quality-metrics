@@ -50,29 +50,43 @@ public class BreezometerAPI {
         LocalDateTime currentTime = LocalDateTime.now();
 
         if (localDateTime == null) {
-            return UriComponentsBuilder.fromHttpUrl(URI_PRESENT)
-                    .queryParam("lat", latitude)
-                    .queryParam("lon", longitude)
-                    .queryParam("key", API_KEY)
-                    .queryParam("features", POLLUTANT_FEATURE);
+            return buildUriForPresentRequest(latitude, longitude);
         } else if (localDateTime.isBefore(currentTime)) {
-            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-            String formattedLocalDateTime = localDateTime.format(formatter);
-            return UriComponentsBuilder.fromHttpUrl(URI_PAST)
-                    .queryParam("lat", latitude)
-                    .queryParam("lon", longitude)
-                    .queryParam("key", API_KEY)
-                    .queryParam("datetime", formattedLocalDateTime)
-                    .queryParam("features", POLLUTANT_FEATURE);
+            return buildUriForPastRequest(latitude, longitude, localDateTime);
         } else {
-            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-            String formattedLocalDateTime = localDateTime.format(formatter);
-            return UriComponentsBuilder.fromHttpUrl(URI_FUTURE)
-                    .queryParam("lat", latitude)
-                    .queryParam("lon", longitude)
-                    .queryParam("key", API_KEY)
-                    .queryParam("datetime", formattedLocalDateTime)
-                    .queryParam("features", POLLUTANT_FEATURE);
+            return buildUriForFutureRequest(latitude, longitude, localDateTime);
         }
+    }
+
+    private UriComponentsBuilder buildUriForPresentRequest(double latitude, double longitude) {
+        return UriComponentsBuilder.fromHttpUrl(URI_PRESENT)
+                .queryParam("lat", latitude)
+                .queryParam("lon", longitude)
+                .queryParam("key", API_KEY)
+                .queryParam("features", POLLUTANT_FEATURE);
+    }
+
+    private UriComponentsBuilder buildUriForPastRequest(double latitude, double longitude,
+                                                           LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        String formattedLocalDateTime = localDateTime.format(formatter);
+        return UriComponentsBuilder.fromHttpUrl(URI_PAST)
+                .queryParam("lat", latitude)
+                .queryParam("lon", longitude)
+                .queryParam("key", API_KEY)
+                .queryParam("datetime", formattedLocalDateTime)
+                .queryParam("features", POLLUTANT_FEATURE);
+    }
+
+    private UriComponentsBuilder buildUriForFutureRequest(double latitude, double longitude,
+                                                        LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        String formattedLocalDateTime = localDateTime.format(formatter);
+        return UriComponentsBuilder.fromHttpUrl(URI_FUTURE)
+                .queryParam("lat", latitude)
+                .queryParam("lon", longitude)
+                .queryParam("key", API_KEY)
+                .queryParam("datetime", formattedLocalDateTime)
+                .queryParam("features", POLLUTANT_FEATURE);
     }
 }
