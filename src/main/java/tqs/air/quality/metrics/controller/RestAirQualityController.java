@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tqs.air.quality.metrics.exception.ResultNotFoundException;
 import tqs.air.quality.metrics.model.AirQualityMetrics;
 import tqs.air.quality.metrics.service.AirQualityMetricsService;
 
@@ -23,7 +24,8 @@ public class RestAirQualityController {
                                                       @RequestParam double longitude,
                                                       @RequestParam(name = "datetime", required = false)
                                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                              LocalDateTime localDateTime) throws Exception {
+                                                              LocalDateTime localDateTime)
+    throws ResultNotFoundException {
         return service.getAirQualityMetrics(latitude, longitude, localDateTime);
 
     }

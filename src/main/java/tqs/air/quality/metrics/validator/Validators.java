@@ -4,8 +4,11 @@ import java.time.LocalDateTime;
 
 public class Validators {
 
-    public static void checkIfUserInputIsValid(double latitude, double longitude, LocalDateTime localDateTime)
-            throws IllegalArgumentException {
+    private Validators() {
+
+    }
+
+    public static void checkIfUserInputIsValid(double latitude, double longitude, LocalDateTime localDateTime) {
         checkIfLatitudeIsValid(latitude);
         checkIfLongitudeIsValid(longitude);
         checkIfLocalDateTimeIsValid(localDateTime);
