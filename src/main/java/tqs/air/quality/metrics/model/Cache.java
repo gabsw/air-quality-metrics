@@ -35,15 +35,11 @@ public class Cache<K, V> {
             }
         });
 
-        return extractFromNode(node);
+        return node.getValue();
     }
 
-    public CacheStats stats() {
+    public CacheStats computeStats() {
         return new CacheStats(totalRequests, hitCount, missCount, evictionCount);
-    }
-
-    private V extractFromNode(Node node) {
-        return node == null ? null : node.getValue();
     }
 
     private class Node {

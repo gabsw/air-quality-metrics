@@ -30,7 +30,7 @@ public class AirQualityMetricsService {
     }
 
     public CacheStats getCacheStats() {
-        return cache.stats();
+        return cache.computeStats();
     }
 
 }
