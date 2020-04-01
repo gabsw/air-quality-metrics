@@ -34,7 +34,6 @@ public class Cache<K, V> {
                 return n;
             }
         });
-
         return node.getValue();
     }
 
@@ -46,15 +45,15 @@ public class Cache<K, V> {
         private final V value;
         private final long timestamp = System.currentTimeMillis();
 
-        public Node(V value) {
+        Node(V value) {
             this.value = value;
         }
 
-        public boolean isExpired(long millisToLive) {
+        boolean isExpired(long millisToLive) {
             return System.currentTimeMillis() > timestamp + millisToLive;
         }
 
-        public V getValue() {
+        V getValue() {
             return value;
         }
     }
