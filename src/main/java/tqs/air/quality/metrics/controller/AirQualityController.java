@@ -26,8 +26,7 @@ public class AirQualityController {
 
     @PostMapping("/air-quality")
     public String displayResults(LocationDatetime locationDatetime, Model model) {
-        AirQualityMetrics metrics = service.getAirQualityMetrics(locationDatetime.getLatitude(),
-                locationDatetime.getLongitude(), locationDatetime.getLocalDateTime());
+        AirQualityMetrics metrics = service.getAirQualityMetrics(locationDatetime);
         model.addAttribute("metrics", metrics);
         return "results";
     }

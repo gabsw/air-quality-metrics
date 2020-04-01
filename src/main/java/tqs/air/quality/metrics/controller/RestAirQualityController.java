@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tqs.air.quality.metrics.exception.ResultNotFoundException;
 import tqs.air.quality.metrics.model.AirQualityMetrics;
+import tqs.air.quality.metrics.model.LocationDatetime;
 import tqs.air.quality.metrics.service.AirQualityMetricsService;
 
 import java.time.LocalDateTime;
@@ -26,7 +27,7 @@ public class RestAirQualityController {
                                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                                               LocalDateTime localDateTime)
     throws ResultNotFoundException {
-        return service.getAirQualityMetrics(latitude, longitude, localDateTime);
+        return service.getAirQualityMetrics(new LocationDatetime(latitude, longitude, localDateTime));
 
     }
 }

@@ -1,5 +1,7 @@
 package tqs.air.quality.metrics.validator;
 
+import tqs.air.quality.metrics.model.LocationDatetime;
+
 import java.time.LocalDateTime;
 
 public class Validators {
@@ -8,10 +10,10 @@ public class Validators {
 
     }
 
-    public static void checkIfUserInputIsValid(double latitude, double longitude, LocalDateTime localDateTime) {
-        checkIfLatitudeIsValid(latitude);
-        checkIfLongitudeIsValid(longitude);
-        checkIfLocalDateTimeIsValid(localDateTime);
+    public static void checkIfUserInputIsValid(LocationDatetime locationDatetime) {
+        checkIfLatitudeIsValid(locationDatetime.getLatitude());
+        checkIfLongitudeIsValid(locationDatetime.getLongitude());
+        checkIfLocalDateTimeIsValid(locationDatetime.getLocalDateTime());
     }
 
     private static void checkIfLatitudeIsValid(double latitude) {

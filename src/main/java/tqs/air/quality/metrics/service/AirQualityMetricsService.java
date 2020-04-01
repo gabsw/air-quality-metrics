@@ -11,8 +11,6 @@ import tqs.air.quality.metrics.model.LocationDatetime;
 import tqs.air.quality.metrics.model.breezometer.BreezometerResult;
 import tqs.air.quality.metrics.validator.Validators;
 
-import java.time.LocalDateTime;
-
 @Service
 public class AirQualityMetricsService {
     @Autowired
@@ -25,10 +23,10 @@ public class AirQualityMetricsService {
         return new AirQualityMetrics(locationDatetime.getLatitude(), locationDatetime.getLongitude(), breezometerResult);
     });
 
-    public AirQualityMetrics getAirQualityMetrics(double latitude, double longitude, LocalDateTime localDateTime)
+    public AirQualityMetrics getAirQualityMetrics(LocationDatetime locationDatetime)
             throws ResultNotFoundException, ApiServerException {
-        Validators.checkIfUserInputIsValid(latitude, longitude, localDateTime);
-        return cache.get(new LocationDatetime(latitude, longitude, localDateTime));
+        Validators.checkIfUserInputIsValid(locationDatetime);
+        return cache.get(locationDatetime);
     }
 
     public CacheStats getCacheStats() {
