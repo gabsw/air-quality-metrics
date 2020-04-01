@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tqs.air.quality.metrics.model.CacheStatsDTO;
+import tqs.air.quality.metrics.model.CacheStats;
 import tqs.air.quality.metrics.service.AirQualityMetricsService;
 
 @RestController
@@ -15,7 +15,7 @@ public class RestCacheStatsController {
     private AirQualityMetricsService service;
 
     @GetMapping("")
-    public CacheStatsDTO getCacheStats() {
-        return service.getCacheStatsDTO();
+    public CacheStats getCacheStats() {
+        return service.getCacheStats();
     }
 }
