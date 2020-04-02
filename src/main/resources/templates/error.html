@@ -7,7 +7,24 @@
 <body>
 
     <h2>Error</h2>
-    <p><span th:text="${error.message}" /></p>
+    <table>
+        <tr>
+            <td>Error</td>
+            <td th:text="${error}"/>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td th:text="${status}"/>
+        </tr>
+        <tr>
+            <td>Message</td>
+            <td th:text="${message}"/>
+        </tr>
+        <tr>
+            <td>Date</td>
+            <td th:text="${timestamp}"/>
+        </tr>
+    </table>
 
 <p>Go back to <a href="/">home page</a></p>
 </body>

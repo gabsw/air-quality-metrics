@@ -50,11 +50,11 @@ public class Validators {
         LocalDateTime maxTime = currentTime.plusHours(96);
         LocalDateTime minTime = currentTime.minusHours(720);
 
-        if (currentTime.isAfter(maxTime)) {
+        if (localDateTime.isAfter(maxTime)) {
             throw new IllegalArgumentException("Date and time cannot exceed 96 hours into the future.");
         }
 
-        if (currentTime.isBefore(minTime)) {
+        if (localDateTime.isBefore(minTime)) {
             throw new IllegalArgumentException("Date and time cannot exceed 720 hours into the past.");
         }
     }

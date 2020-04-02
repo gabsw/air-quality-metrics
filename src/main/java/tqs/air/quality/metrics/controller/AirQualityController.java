@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import tqs.air.quality.metrics.exception.ResultNotFoundException;
 import tqs.air.quality.metrics.model.AirQualityMetrics;
 import tqs.air.quality.metrics.model.LocationDatetime;
 import tqs.air.quality.metrics.service.AirQualityMetricsService;
@@ -30,5 +31,4 @@ public class AirQualityController {
         model.addAttribute("metrics", metrics);
         return "results";
     }
-
 }
