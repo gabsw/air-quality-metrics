@@ -1,6 +1,7 @@
 package tqs.air.quality.metrics.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class CacheStats implements Serializable {
     private long totalRequests;
@@ -23,49 +24,27 @@ public class CacheStats implements Serializable {
         return totalRequests;
     }
 
-    public void setTotalRequests(long totalRequests) {
-        this.totalRequests = totalRequests;
-    }
-
     public long getHitCount() {
         return hitCount;
-    }
-
-    public void setHitCount(long hitCount) {
-        this.hitCount = hitCount;
     }
 
     public double getHitRate() {
         return hitRate;
     }
 
-    public void setHitRate(double hitRate) {
-        this.hitRate = hitRate;
-    }
-
     public long getMissCount() {
         return missCount;
-    }
-
-    public void setMissCount(long missCount) {
-        this.missCount = missCount;
     }
 
     public double getMissRate() {
         return missRate;
     }
 
-    public void setMissRate(double missRate) {
-        this.missRate = missRate;
-    }
 
     public long getEvictionCount() {
         return evictionCount;
     }
 
-    public void setEvictionCount(long evictionCount) {
-        this.evictionCount = evictionCount;
-    }
 
     @Override
     public String toString() {
@@ -77,5 +56,23 @@ public class CacheStats implements Serializable {
                 ", missRate=" + missRate +
                 ", evictionCount=" + evictionCount +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CacheStats that = (CacheStats) o;
+        return totalRequests == that.totalRequests &&
+                hitCount == that.hitCount &&
+                Double.compare(that.hitRate, hitRate) == 0 &&
+                missCount == that.missCount &&
+                Double.compare(that.missRate, missRate) == 0 &&
+                evictionCount == that.evictionCount;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(totalRequests, hitCount, hitRate, missCount, missRate, evictionCount);
     }
 }

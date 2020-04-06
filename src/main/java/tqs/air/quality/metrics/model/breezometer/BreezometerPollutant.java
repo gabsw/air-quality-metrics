@@ -9,6 +9,15 @@ public class BreezometerPollutant {
     private String fullName;
     private BreezometerConcentration concentration;
 
+    public BreezometerPollutant() {
+    }
+
+    public BreezometerPollutant(String initials, String fullName, BreezometerConcentration concentration) {
+        this.initials = initials;
+        this.fullName = fullName;
+        this.concentration = concentration;
+    }
+
     public String getInitials() {
         return initials;
     }

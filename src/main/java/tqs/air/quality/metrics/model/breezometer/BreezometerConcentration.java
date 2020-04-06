@@ -4,6 +4,14 @@ public class BreezometerConcentration {
     private double value;
     private String units;
 
+    public BreezometerConcentration(double value, String units) {
+        this.value = value;
+        this.units = units;
+    }
+
+    public BreezometerConcentration() {
+    }
+
     public double getValue() {
         return value;
     }

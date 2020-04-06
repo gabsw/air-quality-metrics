@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class AirQualityMetrics implements Serializable {
     private double latitude;
@@ -64,5 +65,31 @@ public class AirQualityMetrics implements Serializable {
 
     public void setGases(List<Gas> gases) {
         this.gases = gases;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AirQualityMetrics metrics = (AirQualityMetrics) o;
+        return Double.compare(metrics.latitude, latitude) == 0 &&
+                Double.compare(metrics.longitude, longitude) == 0 &&
+                Objects.equals(dateTime, metrics.dateTime) &&
+                Objects.equals(gases, metrics.gases);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(latitude, longitude, dateTime, gases);
+    }
+
+    @Override
+    public String toString() {
+        return "AirQualityMetrics{" +
+                "latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", dateTime=" + dateTime +
+                ", gases=" + gases +
+                '}';
     }
 }

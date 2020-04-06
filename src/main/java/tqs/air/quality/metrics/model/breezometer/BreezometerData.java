@@ -12,6 +12,15 @@ public class BreezometerData {
     private Boolean dateAvailable;
     private Map<String, BreezometerPollutant> pollutants;
 
+    public BreezometerData(LocalDateTime dateTime, Boolean dateAvailable, Map<String, BreezometerPollutant> pollutants) {
+        this.dateTime = dateTime;
+        this.dateAvailable = dateAvailable;
+        this.pollutants = pollutants;
+    }
+
+    public BreezometerData() {
+    }
+
     public LocalDateTime getDateTime() {
         return dateTime;
     }

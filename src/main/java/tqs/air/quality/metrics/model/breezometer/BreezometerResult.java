@@ -7,6 +7,14 @@ public class BreezometerResult {
     private String error;
     private BreezometerData data;
 
+    public BreezometerResult(String error, BreezometerData data) {
+        this.error = error;
+        this.data = data;
+    }
+
+    public BreezometerResult() {
+    }
+
     public String getError() {
         return error;
     }

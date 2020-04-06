@@ -3,6 +3,7 @@ package tqs.air.quality.metrics.model;
 import tqs.air.quality.metrics.model.breezometer.BreezometerPollutant;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Gas implements Serializable {
 
@@ -48,5 +49,31 @@ public class Gas implements Serializable {
 
     public void setUnits(String units) {
         this.units = units;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Gas gas = (Gas) o;
+        return Double.compare(gas.amount, amount) == 0 &&
+                Objects.equals(initials, gas.initials) &&
+                Objects.equals(name, gas.name) &&
+                Objects.equals(units, gas.units);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(initials, name, amount, units);
+    }
+
+    @Override
+    public String toString() {
+        return "Gas{" +
+                "initials='" + initials + '\'' +
+                ", name='" + name + '\'' +
+                ", amount=" + amount +
+                ", units='" + units + '\'' +
+                '}';
     }
 }
