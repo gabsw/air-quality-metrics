@@ -14,7 +14,7 @@ import tqs.air.quality.metrics.service.AirQualityMetricsService;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("api/air-quality-metrics")
+@RequestMapping("/api/air-quality-metrics")
 public class RestAirQualityController {
 
     @Autowired
@@ -22,11 +22,11 @@ public class RestAirQualityController {
 
     @GetMapping("")
     public AirQualityMetrics getAirQualityMetrics(@RequestParam double latitude,
-                                                      @RequestParam double longitude,
-                                                      @RequestParam(name = "datetime", required = false)
-                                                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                              LocalDateTime localDateTime)
-    throws ResultNotFoundException {
+                                                  @RequestParam double longitude,
+                                                  @RequestParam(name = "datetime", required = false)
+                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                          LocalDateTime localDateTime)
+            throws ResultNotFoundException {
         return service.getAirQualityMetrics(new LocationDatetime(latitude, longitude, localDateTime));
 
     }
