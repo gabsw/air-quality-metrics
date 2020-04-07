@@ -8,9 +8,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 public class LocationDatetime {
-    @NotNull
+
     private double latitude;
-    @NotNull
     private double longitude;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime localDateTime;
@@ -23,12 +22,6 @@ public class LocationDatetime {
         } else {
             this.localDateTime = null;
         }
-//        this.localDateTime = localDateTime;
-    }
-
-    public LocationDatetime(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
     }
 
     public LocationDatetime() {
