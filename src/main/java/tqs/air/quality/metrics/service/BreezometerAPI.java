@@ -2,6 +2,7 @@ package tqs.air.quality.metrics.service;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import tqs.air.quality.metrics.exception.ApiServerException;
@@ -30,15 +31,16 @@ public class BreezometerAPI {
     public BreezometerResult getBreezometerResult(double latitude, double longitude, LocalDateTime localDateTime)
             throws ResultNotFoundException, ApiServerException {
 
-        ResponseEntity<BreezometerResult> response = pollutantRequest(latitude, longitude, localDateTime);
+        ResponseEntity<BreezometerResult> response;
+        try {
+            response = pollutantRequest(latitude, longitude, localDateTime);
+        } catch (RestClientException ex) {
+            throw new ApiServerException("Server error in the Breezometer API.", ex);
+        }
 
         if (response.getStatusCodeValue() == 404) {
             throw new ResultNotFoundException("Breezometer result not found for: " +
                     "latitude=" + latitude + ", longitude=" + longitude);
-        }
-
-        if (response.getStatusCodeValue() >= 500) {
-            throw new ApiServerException("Server error in the Breezometer API.");
         }
 
         if (response.getStatusCodeValue() != 200) {

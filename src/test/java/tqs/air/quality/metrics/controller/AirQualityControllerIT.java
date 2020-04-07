@@ -36,7 +36,6 @@ public class AirQualityControllerIT {
     void givenHomePageURI_thenStatus200() throws Exception {
         mvc.perform(get("/")
                 .contentType(MediaType.TEXT_HTML))
-                .andDo(print())
                 .andExpect(view().name("index"))
                 .andExpect(status().isOk());
     }
@@ -48,7 +47,6 @@ public class AirQualityControllerIT {
                 .param("latitude", String.valueOf(latitude))
                 .param("longitude", String.valueOf(longitude))
                 .param("datetime", formattedLocalDateTime))
-                .andDo(print())
                 .andExpect(view().name("results"))
                 .andExpect(status().isOk());
     }

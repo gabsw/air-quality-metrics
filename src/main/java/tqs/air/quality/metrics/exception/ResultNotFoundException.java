@@ -12,16 +12,4 @@ public class ResultNotFoundException extends RuntimeException {
     public ResultNotFoundException(String s) {
         super(s);
     }
-
-    public ResultNotFoundException(String s, Throwable throwable) {
-        super(s, throwable);
-    }
-
-    public ResultNotFoundException(Throwable throwable) {
-        super(throwable);
-    }
-
-    public ResultNotFoundException(String s, Throwable throwable, boolean b, boolean b1) {
-        super(s, throwable, b, b1);
-    }
 }

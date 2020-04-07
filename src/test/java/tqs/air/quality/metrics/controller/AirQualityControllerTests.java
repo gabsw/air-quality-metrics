@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import tqs.air.quality.metrics.exception.ResultNotFoundException;
+import tqs.air.quality.metrics.model.LocationDatetime;
 import tqs.air.quality.metrics.service.AirQualityMetricsService;
 
 import java.time.format.DateTimeFormatter;
@@ -16,6 +17,7 @@ import java.time.temporal.ChronoUnit;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static tqs.air.quality.metrics.Utils.*;
@@ -31,6 +33,15 @@ public class AirQualityControllerTests {
 
     private DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
     private String formattedLocalDateTime = currentLocalDateTime.truncatedTo(ChronoUnit.SECONDS).format(formatter);
+
+    @Test
+    void givenHomePageURI_thenReturnIndexView() throws Exception {
+        mvc.perform(get("/")
+                .contentType(MediaType.TEXT_HTML))
+                .andExpect(view().name("index"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("locationDateTime", new LocationDatetime()));
+    }
 
     @Test
     void givenAllParameters_whenPost_thenReturnResultsView() throws Exception {
@@ -69,7 +80,7 @@ public class AirQualityControllerTests {
     }
 
     @Test
-    void givenResultNotFoundException_whenPost_thenErrorView() throws Exception {
+    void givenResultNotFoundException_whenPost_thenStatusIs404() throws Exception {
         given(service.getAirQualityMetrics(locationDatetime)).willThrow(
                 new ResultNotFoundException());
 

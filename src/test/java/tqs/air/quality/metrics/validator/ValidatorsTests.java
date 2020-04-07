@@ -102,4 +102,9 @@ public class ValidatorsTests {
                 validLongitude, validLocalDateTime)));
     }
 
+    @Test
+    void whenAllArgsAreValidAndLocalDateTimeIsNull_NoExceptionShouldBeThrown() {
+        assertDoesNotThrow(() -> Validators.checkIfUserInputIsValid(new LocationDatetime(validLatitude,
+                validLongitude, null)));
+    }
 }
