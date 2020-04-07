@@ -10,16 +10,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import tqs.air.quality.metrics.exception.ResultNotFoundException;
 import tqs.air.quality.metrics.service.AirQualityMetricsService;
 
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static tqs.air.quality.metrics.Utils.*;
 
-@WebMvcTest(RestAirQualityController.class)
-public class RestAirQualityControllerTests {
+@WebMvcTest(AirQualityController.class)
+public class AirQualityControllerTests {
 
     @Autowired
     private MockMvc mvc;
@@ -27,68 +29,55 @@ public class RestAirQualityControllerTests {
     @MockBean
     private AirQualityMetricsService service;
 
-    private String expectedJSONContent = "{\"latitude\":" +
-            latitude +
-            ",\"longitude\":" +
-            longitude +
-            ",\"dateTime\":\"" +
-            currentLocalDateTime +
-            "\",\"gases\":[{\"initials\":\"" +
-            pollutantInitials +
-            "\",\"name\":\"" +
-            pollutantFullName +
-            "\",\"amount\":" +
-            concentrationValue +
-            ",\"units\":\"" +
-            concentrationUnits +
-            "\"}]}";
-
+    private DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+    private String formattedLocalDateTime = currentLocalDateTime.truncatedTo(ChronoUnit.SECONDS).format(formatter);
 
     @Test
-    void givenAllParameters_whenGetMetrics_thenReturnJson() throws Exception {
+    void givenAllParameters_whenPost_thenReturnResultsView() throws Exception {
         given(service.getAirQualityMetrics(locationDatetime)).willReturn(airQualityMetrics);
 
-        mvc.perform(get("/api/air-quality-metrics")
-                .contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/air-quality")
+                .contentType(MediaType.TEXT_HTML)
                 .param("latitude", String.valueOf(latitude))
                 .param("longitude", String.valueOf(longitude))
-                .param("datetime", String.valueOf(currentLocalDateTime))
+                .param("localDateTime", formattedLocalDateTime)
         )
                 .andExpect(status().isOk())
-                .andExpect(content().json(expectedJSONContent));
+                .andExpect(view().name("results"))
+                .andExpect(model().attribute("metrics", airQualityMetrics));
 
 
         verify(service, VerificationModeFactory.times(1)).getAirQualityMetrics(locationDatetime);
         reset(service);
     }
 
-
     @Test
-    void givenRequiredParameters_whenGetMetrics_thenReturnJson() throws Exception {
+    void givenRequiredParameters_whenPost_thenReturnResultsView() throws Exception {
         given(service.getAirQualityMetrics(locationDatetimeWithNull)).willReturn(airQualityMetricsWithNull);
 
-        mvc.perform(
-                get("/api/air-quality-metrics")
-                .contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/air-quality")
+                .contentType(MediaType.TEXT_HTML)
                 .param("latitude", String.valueOf(latitude))
                 .param("longitude", String.valueOf(longitude))
-        ).andExpect(status().isOk())
-                .andExpect(content().json(expectedJSONContent));
+        )
+                .andExpect(status().isOk())
+                .andExpect(view().name("results"))
+                .andExpect(model().attribute("metrics", airQualityMetricsWithNull));
         verify(service, VerificationModeFactory.times(1))
                 .getAirQualityMetrics(locationDatetimeWithNull);
         reset(service);
     }
 
     @Test
-    void givenResultNotFoundException_whenGetMetrics_thenThrowHTTPStatusNotFound() throws Exception {
+    void givenResultNotFoundException_whenPost_thenErrorView() throws Exception {
         given(service.getAirQualityMetrics(locationDatetime)).willThrow(
                 new ResultNotFoundException());
 
-        mvc.perform(get("/api/air-quality-metrics")
-                .contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/air-quality")
+                .contentType(MediaType.TEXT_HTML)
                 .param("latitude", String.valueOf(latitude))
                 .param("longitude", String.valueOf(longitude))
-                .param("datetime", String.valueOf(currentLocalDateTime))
+                .param("localDateTime", formattedLocalDateTime)
         )
                 .andExpect(status().isNotFound());
         verify(service, VerificationModeFactory.times(1)).getAirQualityMetrics(locationDatetime);

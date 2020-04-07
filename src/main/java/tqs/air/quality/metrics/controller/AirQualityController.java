@@ -11,13 +11,17 @@ import tqs.air.quality.metrics.model.AirQualityMetrics;
 import tqs.air.quality.metrics.model.LocationDatetime;
 import tqs.air.quality.metrics.service.AirQualityMetricsService;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
 
 @Controller
 @RequestMapping("/")
 public class AirQualityController {
 
     @Autowired
-    AirQualityMetricsService service;
+    private AirQualityMetricsService service;
 
     @GetMapping("")
     public String getLocationAndDate(Model model) {
@@ -26,9 +30,23 @@ public class AirQualityController {
     }
 
     @PostMapping("/air-quality")
-    public String displayResults(LocationDatetime locationDatetime, Model model) {
+    public String displayResults(LocationDatetime locationDatetime, Model model)
+            throws ResultNotFoundException {
         AirQualityMetrics metrics = service.getAirQualityMetrics(locationDatetime);
-        model.addAttribute("metrics", metrics);
-        return "results";
+        if (metrics != null) {
+            model.addAttribute("metrics", metrics);
+            return "results";
+        } else {
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+            String formattedLocalDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).format(formatter);
+
+            model.addAttribute("error", "Result Not Found");
+            model.addAttribute("status", "404 Not Found");
+            model.addAttribute("message", "Breezometer result not found for: " +
+                    "latitude=" + locationDatetime.getLatitude() + ", longitude=" + locationDatetime.getLongitude());
+            model.addAttribute("timestamp", formattedLocalDateTime);
+            return "error";
+        }
+
     }
 }

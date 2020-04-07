@@ -28,6 +28,5 @@ public class RestAirQualityController {
                                                           LocalDateTime localDateTime)
             throws ResultNotFoundException {
         return service.getAirQualityMetrics(new LocationDatetime(latitude, longitude, localDateTime));
-
     }
 }

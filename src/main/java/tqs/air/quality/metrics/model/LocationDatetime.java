@@ -2,12 +2,15 @@ package tqs.air.quality.metrics.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 public class LocationDatetime {
-
+    @NotNull
     private double latitude;
+    @NotNull
     private double longitude;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime localDateTime;
@@ -15,7 +18,12 @@ public class LocationDatetime {
     public LocationDatetime(double latitude, double longitude, LocalDateTime localDateTime) {
         this.latitude = latitude;
         this.longitude = longitude;
-        this.localDateTime = localDateTime;
+        if (localDateTime != null) {
+            this.localDateTime = localDateTime.truncatedTo(ChronoUnit.SECONDS);
+        } else {
+            this.localDateTime = null;
+        }
+//        this.localDateTime = localDateTime;
     }
 
     public LocationDatetime(double latitude, double longitude) {
@@ -30,20 +38,20 @@ public class LocationDatetime {
         return latitude;
     }
 
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
-    }
-
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
+    public double getLongitude() {
+        return longitude;
+    }
+
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
     }
 
     public void setLocalDateTime(LocalDateTime localDateTime) {
@@ -63,5 +71,14 @@ public class LocationDatetime {
     @Override
     public int hashCode() {
         return Objects.hash(latitude, longitude, localDateTime);
+    }
+
+    @Override
+    public String toString() {
+        return "LocationDatetime{" +
+                "latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", localDateTime=" + localDateTime +
+                '}';
     }
 }

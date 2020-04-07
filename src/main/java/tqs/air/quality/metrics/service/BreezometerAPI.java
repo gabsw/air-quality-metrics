@@ -11,6 +11,7 @@ import tqs.air.quality.metrics.model.breezometer.BreezometerResult;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class BreezometerAPI {
@@ -52,18 +53,18 @@ public class BreezometerAPI {
         RestTemplate restTemplate = new RestTemplate();
         UriComponentsBuilder builder = buildUriForRequest(latitude, longitude, localDateTime);
 
-        return restTemplate.getForEntity(builder.build().encode().toUri(),
-                BreezometerResult.class);
+        return restTemplate.getForEntity(builder.build().encode().toUri(), BreezometerResult.class);
     }
 
     private UriComponentsBuilder buildUriForRequest(double latitude, double longitude,
                                                     LocalDateTime localDateTime) {
 
         LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime cutOffTime = currentTime.truncatedTo(ChronoUnit.DAYS).plusHours(10);
 
         if (localDateTime == null) {
             return buildUriForPresentRequest(latitude, longitude);
-        } else if (localDateTime.isBefore(currentTime)) {
+        } else if (localDateTime.isBefore(currentTime) && localDateTime.isBefore(cutOffTime)) {
             return buildUriForPastRequest(latitude, longitude, localDateTime);
         } else {
             return buildUriForFutureRequest(latitude, longitude, localDateTime);

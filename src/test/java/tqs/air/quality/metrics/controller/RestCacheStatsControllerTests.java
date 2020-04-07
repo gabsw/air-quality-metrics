@@ -52,7 +52,7 @@ public class RestCacheStatsControllerTests {
 
 
     @Test
-    void givenAllParameters_whenGetMetrics_thenReturnJson() throws Exception {
+    void whenGetMetrics_thenReturnJson() throws Exception {
         given(service.getCacheStats()).willReturn(cacheStats);
 
         mvc.perform(get("/api/cache-stats")
