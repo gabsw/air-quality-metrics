@@ -14,7 +14,7 @@ import tqs.air.quality.metrics.validator.Validators;
 @Service
 public class AirQualityMetricsService {
     @Autowired
-    private BreezometerAPI api;
+    private BreezometerApi api;
     private Cache<LocationDatetime, AirQualityMetrics> cache = new Cache<>(60L * 1000, locationDatetime -> {
         BreezometerResult breezometerResult =
                 api.getBreezometerResult(locationDatetime.getLatitude(),

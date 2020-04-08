@@ -1,5 +1,7 @@
 package tqs.air.quality.metrics.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -9,13 +11,16 @@ import tqs.air.quality.metrics.exception.ApiServerException;
 import tqs.air.quality.metrics.exception.BadInputException;
 import tqs.air.quality.metrics.exception.ResultNotFoundException;
 import tqs.air.quality.metrics.model.breezometer.BreezometerResult;
+import tqs.air.quality.metrics.utils.Time;
+import tqs.air.quality.metrics.utils.TimeImpl;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 @Service
-public class BreezometerAPI {
+public class BreezometerApi {
     private static final String API_KEY = "55d98126b0ed483da9ff706420b37411";
     private static final String URI_PRESENT = "https://api.breezometer.com/air-quality/v2/current-conditions";
     private static final String URI_PAST = "https://api.breezometer.com/air-quality/v2/historical/hourly";
@@ -27,13 +32,20 @@ public class BreezometerAPI {
     private static final String DATETIME = "datetime";
     private static final String FEATURES = "features";
 
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
+    private Time time;
+
 
     public BreezometerResult getBreezometerResult(double latitude, double longitude, LocalDateTime localDateTime)
             throws ResultNotFoundException, ApiServerException {
 
+        URI uri = buildUriForRequest(latitude, longitude, localDateTime);
         ResponseEntity<BreezometerResult> response;
         try {
-            response = pollutantRequest(latitude, longitude, localDateTime);
+            response = restTemplate.getForEntity(uri, BreezometerResult.class);
         } catch (RestClientException ex) {
             throw new ApiServerException("Server error in the Breezometer API.", ex);
         }
@@ -50,18 +62,10 @@ public class BreezometerAPI {
         return response.getBody();
     }
 
-    private ResponseEntity<BreezometerResult> pollutantRequest(double latitude, double longitude,
-                                                                           LocalDateTime localDateTime) {
-        RestTemplate restTemplate = new RestTemplate();
-        UriComponentsBuilder builder = buildUriForRequest(latitude, longitude, localDateTime);
+    URI buildUriForRequest(double latitude, double longitude,
+                           LocalDateTime localDateTime) {
 
-        return restTemplate.getForEntity(builder.build().encode().toUri(), BreezometerResult.class);
-    }
-
-    private UriComponentsBuilder buildUriForRequest(double latitude, double longitude,
-                                                    LocalDateTime localDateTime) {
-
-        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime currentTime = time.now();
         LocalDateTime cutOffTime = currentTime.truncatedTo(ChronoUnit.DAYS).plusHours(10);
 
         if (localDateTime == null) {
@@ -73,16 +77,19 @@ public class BreezometerAPI {
         }
     }
 
-    private UriComponentsBuilder buildUriForPresentRequest(double latitude, double longitude) {
+    private URI buildUriForPresentRequest(double latitude, double longitude) {
         return UriComponentsBuilder.fromHttpUrl(URI_PRESENT)
                 .queryParam(LATITUDE, latitude)
                 .queryParam(LONGITUDE, longitude)
                 .queryParam(KEY, API_KEY)
-                .queryParam(FEATURES, POLLUTANT_FEATURE);
+                .queryParam(FEATURES, POLLUTANT_FEATURE)
+                .build()
+                .encode()
+                .toUri();
     }
 
-    private UriComponentsBuilder buildUriForPastRequest(double latitude, double longitude,
-                                                           LocalDateTime localDateTime) {
+    private URI buildUriForPastRequest(double latitude, double longitude,
+                                       LocalDateTime localDateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         String formattedLocalDateTime = localDateTime.format(formatter);
         return UriComponentsBuilder.fromHttpUrl(URI_PAST)
@@ -90,11 +97,14 @@ public class BreezometerAPI {
                 .queryParam(LONGITUDE, longitude)
                 .queryParam(KEY, API_KEY)
                 .queryParam(DATETIME, formattedLocalDateTime)
-                .queryParam(FEATURES, POLLUTANT_FEATURE);
+                .queryParam(FEATURES, POLLUTANT_FEATURE)
+                .build()
+                .encode()
+                .toUri();
     }
 
-    private UriComponentsBuilder buildUriForFutureRequest(double latitude, double longitude,
-                                                        LocalDateTime localDateTime) {
+    private URI buildUriForFutureRequest(double latitude, double longitude,
+                                         LocalDateTime localDateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
         String formattedLocalDateTime = localDateTime.format(formatter);
         return UriComponentsBuilder.fromHttpUrl(URI_FUTURE)
@@ -102,6 +112,19 @@ public class BreezometerAPI {
                 .queryParam(LONGITUDE, longitude)
                 .queryParam(KEY, API_KEY)
                 .queryParam(DATETIME, formattedLocalDateTime)
-                .queryParam(FEATURES, POLLUTANT_FEATURE);
+                .queryParam(FEATURES, POLLUTANT_FEATURE)
+                .build()
+                .encode()
+                .toUri();
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
+    @Bean
+    public Time time() {
+        return new TimeImpl();
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import tqs.air.quality.metrics.exception.ResultNotFoundException;
+import tqs.air.quality.metrics.mocks.MockBase;
 import tqs.air.quality.metrics.model.LocationDatetime;
 import tqs.air.quality.metrics.service.AirQualityMetricsService;
 
@@ -20,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static tqs.air.quality.metrics.Utils.*;
+import static tqs.air.quality.metrics.mocks.PresentMocks.*;
 
 @WebMvcTest(AirQualityController.class)
 public class AirQualityControllerTests {
@@ -45,53 +46,53 @@ public class AirQualityControllerTests {
 
     @Test
     void givenAllParameters_whenPost_thenReturnResultsView() throws Exception {
-        given(service.getAirQualityMetrics(locationDatetime)).willReturn(airQualityMetrics);
+        given(service.getAirQualityMetrics(currentLocationDatetime)).willReturn(currentAirQualityMetrics);
 
         mvc.perform(post("/air-quality")
                 .contentType(MediaType.TEXT_HTML)
-                .param("latitude", String.valueOf(latitude))
-                .param("longitude", String.valueOf(longitude))
+                .param("latitude", String.valueOf(MockBase.latitude))
+                .param("longitude", String.valueOf(MockBase.longitude))
                 .param("localDateTime", formattedLocalDateTime)
         )
                 .andExpect(status().isOk())
                 .andExpect(view().name("results"))
-                .andExpect(model().attribute("metrics", airQualityMetrics));
+                .andExpect(model().attribute("metrics", currentAirQualityMetrics));
 
 
-        verify(service, VerificationModeFactory.times(1)).getAirQualityMetrics(locationDatetime);
+        verify(service, VerificationModeFactory.times(1)).getAirQualityMetrics(currentLocationDatetime);
         reset(service);
     }
 
     @Test
     void givenRequiredParameters_whenPost_thenReturnResultsView() throws Exception {
-        given(service.getAirQualityMetrics(locationDatetimeWithNull)).willReturn(airQualityMetricsWithNull);
+        given(service.getAirQualityMetrics(currentLocationDatetimeWithNull)).willReturn(currentAirQualityMetricsWithNull);
 
         mvc.perform(post("/air-quality")
                 .contentType(MediaType.TEXT_HTML)
-                .param("latitude", String.valueOf(latitude))
-                .param("longitude", String.valueOf(longitude))
+                .param("latitude", String.valueOf(MockBase.latitude))
+                .param("longitude", String.valueOf(MockBase.longitude))
         )
                 .andExpect(status().isOk())
                 .andExpect(view().name("results"))
-                .andExpect(model().attribute("metrics", airQualityMetricsWithNull));
+                .andExpect(model().attribute("metrics", currentAirQualityMetricsWithNull));
         verify(service, VerificationModeFactory.times(1))
-                .getAirQualityMetrics(locationDatetimeWithNull);
+                .getAirQualityMetrics(currentLocationDatetimeWithNull);
         reset(service);
     }
 
     @Test
     void givenResultNotFoundException_whenPost_thenStatusIs404() throws Exception {
-        given(service.getAirQualityMetrics(locationDatetime)).willThrow(
+        given(service.getAirQualityMetrics(currentLocationDatetime)).willThrow(
                 new ResultNotFoundException());
 
         mvc.perform(post("/air-quality")
                 .contentType(MediaType.TEXT_HTML)
-                .param("latitude", String.valueOf(latitude))
-                .param("longitude", String.valueOf(longitude))
+                .param("latitude", String.valueOf(MockBase.latitude))
+                .param("longitude", String.valueOf(MockBase.longitude))
                 .param("localDateTime", formattedLocalDateTime)
         )
                 .andExpect(status().isNotFound());
-        verify(service, VerificationModeFactory.times(1)).getAirQualityMetrics(locationDatetime);
+        verify(service, VerificationModeFactory.times(1)).getAirQualityMetrics(currentLocationDatetime);
         reset(service);
     }
 

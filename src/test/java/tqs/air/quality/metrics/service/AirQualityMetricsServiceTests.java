@@ -2,7 +2,7 @@ package tqs.air.quality.metrics.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-import static tqs.air.quality.metrics.Utils.*;
+import static tqs.air.quality.metrics.mocks.PresentMocks.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,13 +11,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import tqs.air.quality.metrics.exception.ApiServerException;
 import tqs.air.quality.metrics.exception.ResultNotFoundException;
+import tqs.air.quality.metrics.mocks.MockBase;
 import tqs.air.quality.metrics.model.CacheStats;
 
 public class AirQualityMetricsServiceTests {
 
 
     @Mock
-    private BreezometerAPI api;
+    private BreezometerApi api;
 
     @InjectMocks
     private AirQualityMetricsService service;
@@ -31,33 +32,33 @@ public class AirQualityMetricsServiceTests {
     @Test
     void getAirQualityMetricsWithValidResult() {
 
-        when(api.getBreezometerResult(latitude, longitude, currentLocalDateTime)).thenReturn(breezometerResult);
+        when(api.getBreezometerResult(MockBase.latitude, MockBase.longitude, currentLocalDateTime)).thenReturn(currentBreezometerResult);
 
-        assertEquals(airQualityMetrics, service.getAirQualityMetrics(locationDatetime));
+        assertEquals(currentAirQualityMetrics, service.getAirQualityMetrics(currentLocationDatetime));
     }
 
     @Test
     void whenResultWasNotFoundByApi_ResultNotFoundExceptionShouldBeThrownByGetAirQualityMetricsService() {
-        when(api.getBreezometerResult(latitude, longitude, currentLocalDateTime)).
+        when(api.getBreezometerResult(MockBase.latitude, MockBase.longitude, currentLocalDateTime)).
                 thenThrow(new ResultNotFoundException("Breezometer result not found for: " +
-                        "latitude=" + latitude + ", longitude=" + longitude));
+                        "latitude=" + MockBase.latitude + ", longitude=" + MockBase.longitude));
 
         Exception exception = assertThrows(ResultNotFoundException.class,
-                () -> service.getAirQualityMetrics(locationDatetime));
+                () -> service.getAirQualityMetrics(currentLocationDatetime));
 
         String expectedMessage = "Breezometer result not found for: " +
-                "latitude=" + latitude + ", longitude=" + longitude;
+                "latitude=" + MockBase.latitude + ", longitude=" + MockBase.longitude;
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
     void whenServerApiFails_ApiServerExceptionShouldBeThrownByGetAirQualityMetricsService() {
-        when(api.getBreezometerResult(latitude, longitude, currentLocalDateTime)).
+        when(api.getBreezometerResult(MockBase.latitude, MockBase.longitude, currentLocalDateTime)).
                 thenThrow(new ApiServerException("Server error in the Breezometer API."));
 
         Exception exception = assertThrows(ApiServerException.class,
-                () -> service.getAirQualityMetrics(locationDatetime));
+                () -> service.getAirQualityMetrics(currentLocationDatetime));
 
         String expectedMessage = "Server error in the Breezometer API.";
         String actualMessage = exception.getMessage();
@@ -66,8 +67,8 @@ public class AirQualityMetricsServiceTests {
 
     @Test
     void getCacheStats() {
-        when(api.getBreezometerResult(latitude, longitude, currentLocalDateTime)).thenReturn(breezometerResult);
-        service.getAirQualityMetrics(locationDatetime);
+        when(api.getBreezometerResult(MockBase.latitude, MockBase.longitude, currentLocalDateTime)).thenReturn(currentBreezometerResult);
+        service.getAirQualityMetrics(currentLocationDatetime);
 
         CacheStats cacheStats = new CacheStats(1, 0, 1, 0);
 

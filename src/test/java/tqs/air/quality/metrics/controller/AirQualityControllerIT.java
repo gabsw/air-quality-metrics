@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import tqs.air.quality.metrics.AirQualityMetricsApplication;
+import tqs.air.quality.metrics.mocks.MockBase;
 import tqs.air.quality.metrics.service.AirQualityMetricsService;
 
 import java.time.format.DateTimeFormatter;
@@ -16,7 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static tqs.air.quality.metrics.Utils.*;
+import static tqs.air.quality.metrics.mocks.PresentMocks.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = AirQualityMetricsApplication.class)
@@ -44,8 +45,8 @@ public class AirQualityControllerIT {
     void givenAirQualityURIWithPostAndFormData_WithAllParameters_thenStatus200() throws Exception {
         mvc.perform(post("/air-quality")
                 .contentType(MediaType.TEXT_HTML)
-                .param("latitude", String.valueOf(latitude))
-                .param("longitude", String.valueOf(longitude))
+                .param("latitude", String.valueOf(MockBase.latitude))
+                .param("longitude", String.valueOf(MockBase.longitude))
                 .param("datetime", formattedLocalDateTime))
                 .andExpect(view().name("results"))
                 .andExpect(status().isOk());
@@ -56,8 +57,8 @@ public class AirQualityControllerIT {
     void givenAirQualityURIWithPostAndFormData_WithRequiredParameters_thenStatus200() throws Exception {
         mvc.perform(post("/air-quality")
                 .contentType(MediaType.TEXT_HTML)
-                .param("latitude", String.valueOf(latitude))
-                .param("longitude", String.valueOf(longitude)))
+                .param("latitude", String.valueOf(MockBase.latitude))
+                .param("longitude", String.valueOf(MockBase.longitude)))
                 .andDo(print())
                 .andExpect(view().name("results"))
                 .andExpect(status().isOk());

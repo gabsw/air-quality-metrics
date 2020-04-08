@@ -7,12 +7,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import tqs.air.quality.metrics.AirQualityMetricsApplication;
+import tqs.air.quality.metrics.mocks.MockBase;
 
 import java.time.format.DateTimeFormatter;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static tqs.air.quality.metrics.Utils.*;
+import static tqs.air.quality.metrics.mocks.PresentMocks.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = AirQualityMetricsApplication.class)
@@ -28,8 +29,8 @@ public class RestAirQualityControllerIT {
     void givenAllParameters_whenGetMetrics_thenStatus200() throws Exception {
         mvc.perform(get("/api/air-quality-metrics")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("latitude", String.valueOf(latitude))
-                .param("longitude", String.valueOf(longitude))
+                .param("latitude", String.valueOf(MockBase.latitude))
+                .param("longitude", String.valueOf(MockBase.longitude))
                 .param("datetime", formattedLocalDateTime)
         ).andExpect(status().isOk());
     }
@@ -41,8 +42,8 @@ public class RestAirQualityControllerIT {
         mvc.perform(
                 get("/api/air-quality-metrics")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("latitude", String.valueOf(latitude))
-                .param("longitude", String.valueOf(longitude))
+                .param("latitude", String.valueOf(MockBase.latitude))
+                .param("longitude", String.valueOf(MockBase.longitude))
         ).andExpect(status().isOk());
     }
 }
