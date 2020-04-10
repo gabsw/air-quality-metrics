@@ -34,5 +34,11 @@ pipeline {
                 }
             }
         }
+
+        stage('SonarQube') {
+            steps {
+                sh 'mvn verify sonar:sonar -Dsonar.projectKey=air.quality.metrics -Dsonar.host.url=http://tqs-sonar-qube:9000 -Dsonar.login=e8544bec2705a19e38791482eb9fd52ccd4645b2'
+            }
+        }
     }
 }
