@@ -7,9 +7,9 @@
 <body>
     <div class="container metrics_list">
         <h2>Air Quality Metrics</h2>
-        <p>Latitude: <span th:text="${metrics.latitude}" /></p>
-        <p>Longitude: <span th:text="${metrics.longitude}" /></p>
-        <p>Date and Time: <span th:text="${metrics.dateTime}"/></p>
+        <p>Latitude: <span id="lat_result" th:text="${metrics.latitude}" /></p>
+        <p>Longitude: <span id="long_result" th:text="${metrics.longitude}" /></p>
+        <p>Date and Time: <span id="ldt_result" th:text="${metrics.dateTime}"/></p>
         <br />
         <table>
             <tr>

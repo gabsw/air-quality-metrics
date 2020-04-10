@@ -21,6 +21,8 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static tqs.air.quality.metrics.mocks.MockBase.latitude;
+import static tqs.air.quality.metrics.mocks.MockBase.longitude;
 import static tqs.air.quality.metrics.mocks.PresentMocks.*;
 
 @WebMvcTest(AirQualityController.class)
@@ -41,7 +43,8 @@ public class AirQualityControllerTests {
                 .contentType(MediaType.TEXT_HTML))
                 .andExpect(view().name("index"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("locationDateTime", new LocationDatetime()));
+                .andExpect(model().attribute("locationDateTime", new LocationDatetime(latitude, longitude,
+                        null)));
     }
 
     @Test
@@ -50,8 +53,8 @@ public class AirQualityControllerTests {
 
         mvc.perform(post("/air-quality")
                 .contentType(MediaType.TEXT_HTML)
-                .param("latitude", String.valueOf(MockBase.latitude))
-                .param("longitude", String.valueOf(MockBase.longitude))
+                .param("latitude", String.valueOf(latitude))
+                .param("longitude", String.valueOf(longitude))
                 .param("localDateTime", formattedLocalDateTime)
         )
                 .andExpect(status().isOk())
@@ -69,8 +72,8 @@ public class AirQualityControllerTests {
 
         mvc.perform(post("/air-quality")
                 .contentType(MediaType.TEXT_HTML)
-                .param("latitude", String.valueOf(MockBase.latitude))
-                .param("longitude", String.valueOf(MockBase.longitude))
+                .param("latitude", String.valueOf(latitude))
+                .param("longitude", String.valueOf(longitude))
         )
                 .andExpect(status().isOk())
                 .andExpect(view().name("results"))
@@ -87,8 +90,8 @@ public class AirQualityControllerTests {
 
         mvc.perform(post("/air-quality")
                 .contentType(MediaType.TEXT_HTML)
-                .param("latitude", String.valueOf(MockBase.latitude))
-                .param("longitude", String.valueOf(MockBase.longitude))
+                .param("latitude", String.valueOf(latitude))
+                .param("longitude", String.valueOf(longitude))
                 .param("localDateTime", formattedLocalDateTime)
         )
                 .andExpect(status().isNotFound());
