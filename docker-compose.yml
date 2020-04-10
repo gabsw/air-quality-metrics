@@ -7,27 +7,9 @@ services:
     networks:
       - common_network
 
-  docker:
-    image: docker:dind
-    environment:
-      - DOCKER_TLS_CERTDIR=/certs
-    volumes:
-      - jenkins-docker-certs:/certs/client
-      - jenkins-data:/var/jenkins_home
-      - /home/gabriela:/home
-    restart: always
-    privileged: true
-    networks:
-      - common_network
-
   tqs-jenkins-blueocean:
     image: jenkinsci/blueocean
-    environment:
-      - DOCKER_HOST=tcp://docker:2376
-      - DOCKER_CERT_PATH=/certs/client
-      - DOCKER_TLS_VERIFY=1
     volumes:
-      - jenkins-docker-certs:/certs/client:ro
       - jenkins-data:/var/jenkins_home
       - /home/gabriela:/home
     ports:
@@ -43,7 +25,5 @@ networks:
     driver: "bridge"
 
 volumes:
-  jenkins-docker-certs:
-    driver: local
   jenkins-data:
     driver: local
