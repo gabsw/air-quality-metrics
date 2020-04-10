@@ -7,7 +7,7 @@ services:
     networks:
       - common_network
 
-  tqs-jenkins-docker:
+  docker:
     image: docker:dind
     environment:
       - DOCKER_TLS_CERTDIR=/certs
@@ -23,7 +23,7 @@ services:
   tqs-jenkins-blueocean:
     image: jenkinsci/blueocean
     environment:
-      - DOCKER_HOST=tcp://tqs-jenkins-docker:2376
+      - DOCKER_HOST=tcp://docker:2376
       - DOCKER_CERT_PATH=/certs/client
       - DOCKER_TLS_VERIFY=1
     volumes:
