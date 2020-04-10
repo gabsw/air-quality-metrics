@@ -12,20 +12,16 @@ pipeline {
             }
         }
 
-        stage('Unit Test') {
+        stage('Tests + Static Analysis') {
             steps {
-                sh 'mvn test'
+                sh 'mvn verify sonar:sonar -Pjenkins-tests -Dsonar.projectKey=air.quality.metrics -Dsonar.host.url="http://tqs-sonar-qube:9000" -Dsonar.login=d8fd70c6f3712240b561a58845e87720f82a033e'
             }
+
             post {
                 always {
                     junit 'target/surefire-reports/*.xml'
+                    junit 'target/failsafe-reports/*.xml'
                 }
-            }
-        }
-
-        stage('SonarQube') {
-            steps {
-                sh 'mvn verify sonar:sonar -Dsonar.projectKey=air.quality.metrics -Dsonar.host.url="http://tqs-sonar-qube:9000" -Dsonar.login=d8fd70c6f3712240b561a58845e87720f82a033e'
             }
         }
     }
