@@ -29,6 +29,8 @@ import static tqs.air.quality.metrics.mocks.PresentMocks.currentBreezometerResul
 import static tqs.air.quality.metrics.mocks.PresentMocks.currentLocalDateTime;
 
 public class BreezometerApiTests {
+    private static final String API_KEY = "55d98126b0ed483da9ff706420b37411";
+
     @Mock
     private RestTemplate restTemplate;
     @Mock
@@ -42,6 +44,7 @@ public class BreezometerApiTests {
 
         MockitoAnnotations.initMocks(this);
         when(time.now()).thenReturn(currentLocalDateTime);
+        service.setApiKey(API_KEY);
     }
 
     @Test

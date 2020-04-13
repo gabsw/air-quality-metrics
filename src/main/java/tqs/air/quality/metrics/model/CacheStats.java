@@ -1,9 +1,8 @@
 package tqs.air.quality.metrics.model;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class CacheStats implements Serializable {
+public class CacheStats {
     private long totalRequests;
     private long hitCount;
     private double hitRate;

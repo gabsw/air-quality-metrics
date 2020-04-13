@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
@@ -19,12 +20,16 @@ import static tqs.air.quality.metrics.mocks.MockBase.longitude;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class HomePageIT {
-    private String baseUrl = "http://localhost:8080/";
+    private String baseUrl;
     private Environment environment;
+
+    @Value("${server.port}")
+    private String port;
 
     @BeforeEach
     void startBrowser() {
         environment = new Environment();
+        baseUrl = "http://localhost:" + port + "/";
     }
 
     @AfterEach

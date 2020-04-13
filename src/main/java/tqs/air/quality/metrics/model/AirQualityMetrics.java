@@ -3,14 +3,13 @@ package tqs.air.quality.metrics.model;
 import tqs.air.quality.metrics.model.breezometer.BreezometerPollutant;
 import tqs.air.quality.metrics.model.breezometer.BreezometerResult;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class AirQualityMetrics implements Serializable {
+public class AirQualityMetrics {
     private double latitude;
     private double longitude;
     private LocalDateTime dateTime;

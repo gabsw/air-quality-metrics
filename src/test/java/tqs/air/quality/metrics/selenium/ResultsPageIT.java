@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
@@ -15,12 +16,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class ResultsPageIT {
-    private String baseUrl = "http://localhost:8080/air-quality";
+    private String baseUrl;
     private Environment environment;
+
+    @Value("${server.port}")
+    private String port;
 
     @BeforeEach
     void startBrowser() {
         environment = new Environment();
+        baseUrl = "http://localhost:" + port + "/air-quality";
     }
 
     @AfterEach
@@ -81,7 +86,7 @@ public class ResultsPageIT {
         driver.get(baseUrl);
         driver.findElement(By.linkText("home page")).click();
         String actualUrl = driver.getCurrentUrl();
-        String expectedHomePageUrl = "http://localhost:8080/";
+        String expectedHomePageUrl = "http://localhost:" + port + "/";
         assertEquals(expectedHomePageUrl, actualUrl);
     }
 }

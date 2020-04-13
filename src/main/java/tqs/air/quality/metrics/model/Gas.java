@@ -2,10 +2,9 @@ package tqs.air.quality.metrics.model;
 
 import tqs.air.quality.metrics.model.breezometer.BreezometerPollutant;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class Gas implements Serializable {
+public class Gas {
 
     private String initials;
     private String name;

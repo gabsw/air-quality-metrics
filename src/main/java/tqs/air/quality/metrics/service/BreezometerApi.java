@@ -1,6 +1,7 @@
 package tqs.air.quality.metrics.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,6 @@ import java.time.temporal.ChronoUnit;
 
 @Service
 public class BreezometerApi {
-    private static final String API_KEY = "55d98126b0ed483da9ff706420b37411";
     private static final String URI_PRESENT = "https://api.breezometer.com/air-quality/v2/current-conditions";
     private static final String URI_PAST = "https://api.breezometer.com/air-quality/v2/historical/hourly";
     private static final String URI_FUTURE = "https://api.breezometer.com/air-quality/v2/forecast/hourly";
@@ -31,6 +31,9 @@ public class BreezometerApi {
     private static final String KEY = "key";
     private static final String DATETIME = "datetime";
     private static final String FEATURES = "features";
+
+    @Value("${breezometer.api.key}")
+    private String apiKey;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -81,7 +84,7 @@ public class BreezometerApi {
         return UriComponentsBuilder.fromHttpUrl(URI_PRESENT)
                 .queryParam(LATITUDE, latitude)
                 .queryParam(LONGITUDE, longitude)
-                .queryParam(KEY, API_KEY)
+                .queryParam(KEY, apiKey)
                 .queryParam(FEATURES, POLLUTANT_FEATURE)
                 .build()
                 .encode()
@@ -95,7 +98,7 @@ public class BreezometerApi {
         return UriComponentsBuilder.fromHttpUrl(URI_PAST)
                 .queryParam(LATITUDE, latitude)
                 .queryParam(LONGITUDE, longitude)
-                .queryParam(KEY, API_KEY)
+                .queryParam(KEY, apiKey)
                 .queryParam(DATETIME, formattedLocalDateTime)
                 .queryParam(FEATURES, POLLUTANT_FEATURE)
                 .build()
@@ -110,7 +113,7 @@ public class BreezometerApi {
         return UriComponentsBuilder.fromHttpUrl(URI_FUTURE)
                 .queryParam(LATITUDE, latitude)
                 .queryParam(LONGITUDE, longitude)
-                .queryParam(KEY, API_KEY)
+                .queryParam(KEY, apiKey)
                 .queryParam(DATETIME, formattedLocalDateTime)
                 .queryParam(FEATURES, POLLUTANT_FEATURE)
                 .build()
@@ -126,5 +129,9 @@ public class BreezometerApi {
     @Bean
     public Time time() {
         return new TimeImpl();
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }
