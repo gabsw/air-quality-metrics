@@ -1,11 +1,14 @@
 package tqs.air.quality.metrics.model;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tqs.air.quality.metrics.model.breezometer.BreezometerConcentration;
 import tqs.air.quality.metrics.model.breezometer.BreezometerData;
 import tqs.air.quality.metrics.model.breezometer.BreezometerPollutant;
 import tqs.air.quality.metrics.model.breezometer.BreezometerResult;
+import tqs.air.quality.metrics.utils.Equals;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -59,10 +62,7 @@ public class AirQualityMetricsTests {
 
     @Test
     void checkEquals() {
-        assertAll("equals",
-                () -> assertEquals(metrics, equalMetrics),
-                () -> assertNotEquals(metrics, differentMetrics)
-        );
+        Equals.verifyEquals(AirQualityMetrics.class);
     }
 
     @Test

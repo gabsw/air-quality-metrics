@@ -2,6 +2,8 @@ package tqs.air.quality.metrics.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tqs.air.quality.metrics.utils.Equals;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -20,10 +22,7 @@ public class CacheStatsTests {
 
     @Test
     void checkEquals() {
-        assertAll("equals",
-                () -> assertEquals(cacheStats, equalCacheStats),
-                () -> assertNotEquals(cacheStats, differentCacheStats)
-        );
+        Equals.verifyEquals(CacheStats.class);
     }
 
     @Test

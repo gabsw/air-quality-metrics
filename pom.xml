@@ -51,6 +51,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier</artifactId>
+            <version>3.1.13</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- selenium -->
         <dependency>

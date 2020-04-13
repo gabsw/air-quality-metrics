@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tqs.air.quality.metrics.model.breezometer.BreezometerConcentration;
 import tqs.air.quality.metrics.model.breezometer.BreezometerPollutant;
+import tqs.air.quality.metrics.utils.Equals;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,10 +26,7 @@ public class GasTests {
 
     @Test
     void checkEquals() {
-        assertAll("equals",
-                () -> assertEquals(gas, equalGas),
-                () -> assertNotEquals(gas, differentGas)
-        );
+        Equals.verifyEquals(Gas.class);
     }
 
     @Test
