@@ -16,15 +16,16 @@ import tqs.air.quality.metrics.service.AirQualityMetricsService;
 public class AirQualityController {
 
     // Default values for Paris
-    public static final double latitude = 48.857456;
-    public static final double longitude = 2.354611;
+    public static final double DEFAULT_LATITUDE = 48.857456;
+    public static final double DEFAULT_LONGITUDE = 2.354611;
 
     @Autowired
     private AirQualityMetricsService service;
 
     @GetMapping("")
     public String getLocationAndDate(Model model) {
-        model.addAttribute("locationDateTime", new LocationDatetime(latitude, longitude, null));
+        model.addAttribute("locationDateTime", new LocationDatetime(DEFAULT_LATITUDE,
+                DEFAULT_LONGITUDE, null));
         return "index";
     }
 

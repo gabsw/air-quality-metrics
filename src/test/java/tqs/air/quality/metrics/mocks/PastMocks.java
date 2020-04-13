@@ -18,4 +18,11 @@ public class PastMocks {
     public static final BreezometerResult pastBreezometerResult = MockBase.generateMockBreezometerResult(pastLocalDateTime);
     public static final AirQualityMetrics pastAirQualityMetrics = new AirQualityMetrics(MockBase.latitude, MockBase.longitude,
             pastBreezometerResult);
+
+    public static final LocalDateTime pastLocalDateTimeAfterCutOff = currentLocalDateTime
+                                                                    .truncatedTo(ChronoUnit.DAYS)
+                                                                    .plusHours(11);
+
+    public static final BreezometerResult pastBreezometerResultAfterCutOff = MockBase
+            .generateMockBreezometerResult(pastLocalDateTimeAfterCutOff);
 }

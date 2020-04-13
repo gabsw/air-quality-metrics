@@ -23,8 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static tqs.air.quality.metrics.mocks.FutureMocks.futureBreezometerResult;
 import static tqs.air.quality.metrics.mocks.FutureMocks.futureLocalDateTime;
-import static tqs.air.quality.metrics.mocks.PastMocks.pastBreezometerResult;
-import static tqs.air.quality.metrics.mocks.PastMocks.pastLocalDateTime;
+import static tqs.air.quality.metrics.mocks.PastMocks.*;
 import static tqs.air.quality.metrics.mocks.PresentMocks.currentBreezometerResult;
 import static tqs.air.quality.metrics.mocks.PresentMocks.currentLocalDateTime;
 
@@ -89,6 +88,22 @@ public class BreezometerApiTests {
         String expectedUri = "https://api.breezometer.com/air-quality/v2/forecast/hourly?lat=48.857456&lon=2.354611&key=55d98126b0ed483da9ff706420b37411&datetime=" + formattedDate + "&features=pollutants_concentrations";
         assertAll("future breezometer call",
                 () -> assertEquals(futureBreezometerResult, service.getBreezometerResult(MockBase.latitude, MockBase.longitude, futureLocalDateTime)),
+                () -> assertEquals(expectedUri, uri.toString()));
+    }
+
+    @Test
+    void getValidBreezometerResultAfterCutOffTime() {
+        URI uri = service.buildUriForRequest(MockBase.latitude, MockBase.longitude, pastLocalDateTimeAfterCutOff);
+
+        ResponseEntity<BreezometerResult> result = new ResponseEntity<>(pastBreezometerResultAfterCutOff, HttpStatus.OK);
+
+        when(restTemplate.getForEntity(uri, BreezometerResult.class)).thenReturn(result);
+
+        String formattedDate = pastLocalDateTimeAfterCutOff.format(DateTimeFormatter.ISO_DATE_TIME);
+        String expectedUri = "https://api.breezometer.com/air-quality/v2/forecast/hourly?lat=48.857456&lon=2.354611&key=55d98126b0ed483da9ff706420b37411&datetime=" + formattedDate + "&features=pollutants_concentrations";
+        assertAll("breezometer call after cut off time",
+                () -> assertEquals(pastBreezometerResultAfterCutOff,
+                        service.getBreezometerResult(MockBase.latitude, MockBase.longitude, pastLocalDateTimeAfterCutOff)),
                 () -> assertEquals(expectedUri, uri.toString()));
     }
 
