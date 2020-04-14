@@ -130,7 +130,7 @@ public class BreezometerApiTests {
     }
 
     @Test
-    void whenRestClientExceptionWasReturnedByExternalApi_BadInputExceptionShouldBeThrownByBreezometerResult() {
+    void whenRestClientExceptionWasReturnedByExternalApi_ApiServerExceptionShouldBeThrownByBreezometerResult() {
         URI uri = service.buildUriForRequest(MockBase.latitude, MockBase.longitude, futureLocalDateTime);
 
         when(restTemplate.getForEntity(uri, BreezometerResult.class)).thenThrow(new RestClientException(""));

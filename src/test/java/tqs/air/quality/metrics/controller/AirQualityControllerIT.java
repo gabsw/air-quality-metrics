@@ -34,14 +34,6 @@ public class AirQualityControllerIT {
     private String formattedLocalDateTime = currentLocalDateTime.format(formatter);
 
     @Test
-    void givenHomePageURI_thenStatus200() throws Exception {
-        mvc.perform(get("/")
-                .contentType(MediaType.TEXT_HTML))
-                .andExpect(view().name("index"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
     void givenAirQualityURIWithPostAndFormData_WithAllParameters_thenStatus200() throws Exception {
         mvc.perform(post("/air-quality")
                 .contentType(MediaType.TEXT_HTML)
@@ -59,7 +51,6 @@ public class AirQualityControllerIT {
                 .contentType(MediaType.TEXT_HTML)
                 .param("latitude", String.valueOf(MockBase.latitude))
                 .param("longitude", String.valueOf(MockBase.longitude)))
-                .andDo(print())
                 .andExpect(view().name("results"))
                 .andExpect(status().isOk());
     }

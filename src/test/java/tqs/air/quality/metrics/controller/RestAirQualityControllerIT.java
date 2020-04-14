@@ -38,7 +38,6 @@ public class RestAirQualityControllerIT {
 
     @Test
     void givenRequiredParameters_whenGetMetrics_thenStatus200() throws Exception {
-
         mvc.perform(
                 get("/api/air-quality-metrics")
                 .contentType(MediaType.APPLICATION_JSON)
